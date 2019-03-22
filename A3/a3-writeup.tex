@@ -1,0 +1,53 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{ bbold }
+\usepackage{graphicx}
+\graphicspath{ {images/} }
+
+\title{CSC321  Programming Assignment 3}
+\author{Vitaly Topekha}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Part 1. Encoder-Decoder Models and Capacity}
+
+\begin{enumerate}
+    \item Since the neural network has to compresss more of the necessary information into a fixed-length context vector, the architecrute won't perform well for longer sequences. That way, the decoder has less information to use for translation generation.
+    \item The model works great only for a specific kind of words, for instance with 1 or 2 characters for the first letter vowel words or fist letter consonant word. With 3 or more characters, translation is wrong. Words with consonant pairs like "tr" works well except for some specific cases of length like "truth". Consonant pairs of "sh" do not get translated well even for short length like "shy".
+    
+    Examples:\\
+    i $->$ iway \\
+    is $->$ isway \\
+    she $->$ ethay \\
+    a $->$ away \\
+    no $->$ oway \\
+    hello $->$ erlehay \\
+    happy $->$ apalcay \\
+    easy $->$ eayyway \\
+    
+\end{enumerate}
+
+\section{Part 2. Teacher-Forcing}
+\begin{enumerate}
+    \item The model could be over-fit for the given training data. During the training time the model could receive different inputs from the test time, since the while training, the model uses previous output as an input. Therefore, the performance could be damaged. Sequence of previously generated samples diverges from sequence seen during training.
+    \item Diminish the gap between inpurs seen during training time and test time through randomly using generater output or ground truth from the previous step as input for the current time step.
+\end{enumerate}
+\section{Part 5. Attention Visualizations}
+The model does only work well for words with a common structure. If a words has a weird structre like "ssssssss" it doesn't work since there are not enough training examples for the cases, so it predicts it to something seen before
+\includegraphics[scale=0.6]{1}
+\includegraphics[scale=0.6]{2}
+\includegraphics[scale=0.6]{3}
+\includegraphics[scale=0.6]{4}
+\includegraphics[scale=0.6]{5}
+\includegraphics[scale=0.6]{6}
+\includegraphics[scale=0.6]{7}
+\includegraphics[scale=0.6]{8}
+\includegraphics[scale=0.6]{9}
+\includegraphics[scale=0.6]{10}
+\includegraphics[scale=0.6]{11}
+
+\end{document}
