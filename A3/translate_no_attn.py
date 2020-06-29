@@ -39,8 +39,10 @@ def create_parser():
     """Creates a parser for command-line arguments.
     """
     parser = argparse.ArgumentParser()
-    parser.add_argument('--load', type=str, default='checkpoints/no-attn/py2', help='Path to checkpoint directory.')
-    parser.add_argument('--cuda', action='store_true', default=False, help='Use GPU.')
+    parser.add_argument('--load', type=str, default='checkpoints/no-attn/py2',
+        help='Path to checkpoint directory.')
+    parser.add_argument('--cuda', action='store_true', default=False,
+        help='Use GPU.')
     return parser
 
 

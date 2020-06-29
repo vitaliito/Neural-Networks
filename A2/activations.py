@@ -49,7 +49,8 @@ if __name__ == '__main__':
         cnn = DilatedUNet(args.kernel, args.filters, num_colours)
 
     print("Loading checkpoint...")
-    cnn.load_state_dict(torch.load(args.checkpoint, map_location=lambda storage, loc: storage))
+    cnn.load_state_dict(torch.load(args.checkpoint, map_location=lambda storage,
+        loc: storage))
 
     # Take the idnex of the test image
     id = args.index
@@ -80,7 +81,8 @@ if __name__ == '__main__':
             for i in range(activation.shape[0] // imgwidth)])
         scipy.misc.imsave(path, img)
 
-    for i, tensor in enumerate([cnn.out1, cnn.out2, cnn.out3, cnn.out4, cnn.out5]):
+    for i, tensor in enumerate([cnn.out1, cnn.out2, cnn.out3, cnn.out4,
+            cnn.out5]):
         draw_activations(
             os.path.join(outdir, "filter_out%d_%d.png" % (i, id)),
             tensor.data.cpu().numpy()[0])

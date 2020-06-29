@@ -362,10 +362,7 @@ def main(opts):
     # Group the data by the lengths of the source and target words, to form batches
     train_dict = create_dict(train_pairs)
     val_dict = create_dict(val_pairs)
-
-    ##########################################################################
-    ### Setup: Create Encoder, Decoder, Learning Criterion, and Optimizers ###
-    ##########################################################################
+    
     encoder = models.GRUEncoder(vocab_size=vocab_size, hidden_size=opts.hidden_size, opts=opts)
 
     if opts.no_attention:

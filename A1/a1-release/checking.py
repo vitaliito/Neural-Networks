@@ -170,17 +170,4 @@ def print_gradients():
     print 'param_gradient.output_bias[0]', param_gradient.output_bias[0]
     print 'param_gradient.output_bias[1]', param_gradient.output_bias[1]
     print 'param_gradient.output_bias[2]', param_gradient.output_bias[2]
-    print 'param_gradient.output_bias[3]', param_gradient.output_bias[3]
-    
-
-
-
-
-
-    
-
-    
-    
-    
-
-    
+    print 'param_gradient.output_bias[3]', param_gradient.output_bias[3]    

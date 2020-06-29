@@ -1,20 +1,9 @@
-#
-#  tsne.py
-#  
-# Implementation of t-SNE in Python. The implementation was tested on Python 2.5.1, and it requires a working 
-# installation of NumPy. The implementation comes with an example on the MNIST dataset. In order to plot the
-# results of this example, a working installation of matplotlib is required.
-# The example can be run by executing: ipython tsne.py -pylab
-#
-#
-#  Created by Laurens van der Maaten on 20-12-08.
-#  Copyright (c) 2008 Tilburg University. All rights reserved.
-
 import numpy as Math
 import pylab as Plot
 	
 def Hbeta(D = Math.array([]), beta = 1.0):
-	"""Compute the perplexity and the P-row for a specific value of the precision of a Gaussian distribution."""
+	"""Compute the perplexity and the P-row for a specific value of the
+	precision of a Gaussian distribution."""
 	
 	# Compute P-row and corresponding perplexity
 	P = Math.exp(-D.copy() * beta);
@@ -25,7 +14,8 @@ def Hbeta(D = Math.array([]), beta = 1.0):
 	
 	
 def x2p(X = Math.array([]), tol = 1e-5, perplexity = 30.0):
-	"""Performs a binary search to get P-values in such a way that each conditional Gaussian has the same perplexity."""
+	"""Performs a binary search to get P-values in such a way that each
+	conditional Gaussian has the same perplexity."""
 
 	# Initialize some variables
 	print "Computing pairwise distances..."
@@ -82,7 +72,8 @@ def x2p(X = Math.array([]), tol = 1e-5, perplexity = 30.0):
 	
 	
 def pca(X = Math.array([]), no_dims = 50):
-	"""Runs PCA on the NxD array X in order to reduce its dimensionality to no_dims dimensions."""
+	"""Runs PCA on the NxD array X in order to reduce its dimensionality to
+	no_dims dimensions."""
 
 	print "Preprocessing the data using PCA..."
 	(n, d) = X.shape;
@@ -93,8 +84,10 @@ def pca(X = Math.array([]), no_dims = 50):
 
 
 def tsne(X = Math.array([]), no_dims = 2, initial_dims = 50, perplexity = 30.0):
-	"""Runs t-SNE on the dataset in the NxD array X to reduce its dimensionality to no_dims dimensions.
-	The syntaxis of the function is Y = tsne.tsne(X, no_dims, perplexity), where X is an NxD NumPy array."""
+	"""Runs t-SNE on the dataset in the NxD array X to reduce its
+	dimensionality to no_dims dimensions.
+	The syntaxis of the function is Y = tsne.tsne(X, no_dims, perplexity),
+	where X is an NxD NumPy array."""
 	
 	# Check inputs
 	if X.dtype != "float64":
@@ -129,7 +122,8 @@ def tsne(X = Math.array([]), no_dims = 2, initial_dims = 50, perplexity = 30.0):
 		
 		# Compute pairwise affinities
 		sum_Y = Math.sum(Math.square(Y), 1);		
-		num = 1 / (1 + Math.add(Math.add(-2 * Math.dot(Y, Y.T), sum_Y).T, sum_Y));
+		num = 1 / (1 + Math.add(Math.add(-2 * Math.dot(Y, Y.T), sum_Y).T,
+			sum_Y));
 		num[range(n), range(n)] = 0;
 		Q = num / Math.sum(num);
 		Q = Math.maximum(Q, 1e-12);
@@ -137,14 +131,16 @@ def tsne(X = Math.array([]), no_dims = 2, initial_dims = 50, perplexity = 30.0):
 		# Compute gradient
 		PQ = P - Q;
 		for i in range(n):
-			dY[i,:] = Math.sum(Math.tile(PQ[:,i] * num[:,i], (no_dims, 1)).T * (Y[i,:] - Y), 0);
+			dY[i,:] = Math.sum(Math.tile(PQ[:,i] * num[:,i], (no_dims, 1)).T
+				* (Y[i,:] - Y), 0);
 			
 		# Perform the update
 		if iter < 20:
 			momentum = initial_momentum
 		else:
 			momentum = final_momentum
-		gains = (gains + 0.2) * ((dY > 0) != (iY > 0)) + (gains * 0.8) * ((dY > 0) == (iY > 0));
+		gains = (gains + 0.2) * ((dY > 0) != (iY > 0)) + (gains * 0.8) *
+			((dY > 0) == (iY > 0));
 		gains[gains < min_gain] = min_gain;
 		iY = momentum * iY - eta * (gains * dY);
 		Y = Y + iY;
@@ -164,7 +160,6 @@ def tsne(X = Math.array([]), no_dims = 2, initial_dims = 50, perplexity = 30.0):
 		
 	
 if __name__ == "__main__":
-	print "Run Y = tsne.tsne(X, no_dims, perplexity) to perform t-SNE on your dataset."
 	print "Running example on 2,500 MNIST digits..."
 	X = Math.loadtxt("mnist2500_X.txt");
 	labels = Math.loadtxt("mnist2500_labels.txt");

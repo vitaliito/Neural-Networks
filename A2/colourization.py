@@ -23,9 +23,6 @@ from load_data import load_cifar10
 
 HORSE_CATEGORY = 7
 
-######################################################################
-# Data related code
-######################################################################
 def get_rgb_cat(xs, colours):
     """
     Get colour categories given RGB values. This function doesn't
@@ -142,10 +139,6 @@ def plot(input, gtlabel, output, colours, path):
     scipy.misc.toimage(img, cmin=0, cmax=1).save(path)
 
 
-######################################################################
-# MODELS
-######################################################################
-
 class MyConv2d(nn.Module):
     """
     Our simplified implemented of nn.Conv2d module for 2D convolution
@@ -185,34 +178,34 @@ class MyDilatedConv2d(MyConv2d):
         self.dilation = dilation
 
     def forward(self, input):
-        ############### YOUR CODE GOES HERE ############### 
         pass
-        ###################################################
 
 class CNN(nn.Module):
     def __init__(self, kernel, num_filters, num_colours):
         super(CNN, self).__init__()
         padding = kernel // 2
 
-        ############### YOUR CODE GOES HERE ############### 
         self.downconv1 = nn.Sequential(
             MyConv2d(1, num_filters, kernel_size=kernel, padding=padding),
             nn.MaxPool2d(2),
             nn.BatchNorm2d(num_filters),
             nn.ReLU())
         self.downconv2 = nn.Sequential(
-            MyConv2d(num_filters, num_filters*2, kernel_size=kernel, padding=padding),
+            MyConv2d(num_filters, num_filters*2, kernel_size=kernel,
+                padding=padding),
             nn.MaxPool2d(2),
             nn.BatchNorm2d(num_filters*2),
             nn.ReLU())
 
         self.rfconv = nn.Sequential(
-            MyConv2d(num_filters*2, num_filters*2, kernel_size=kernel, padding=padding),
+            MyConv2d(num_filters*2, num_filters*2, kernel_size=kernel,
+                padding=padding),
             nn.BatchNorm2d(num_filters*2),
             nn.ReLU())
 
         self.upconv1 = nn.Sequential(
-            MyConv2d(num_filters*2, num_filters, kernel_size=kernel, padding=padding),
+            MyConv2d(num_filters*2, num_filters, kernel_size=kernel,
+                padding=padding),
             nn.Upsample(scale_factor=2),
             nn.BatchNorm2d(num_filters),
             nn.ReLU())
@@ -223,7 +216,6 @@ class CNN(nn.Module):
             nn.ReLU())
 
         self.finalconv = MyConv2d(24, 24, kernel_size=kernel)
-        ###################################################
 
     def forward(self, x):
         self.out1 = self.downconv1(x)
@@ -238,7 +230,6 @@ class UNet(nn.Module):
     def __init__(self, kernel, num_filters, num_colours):
         super(UNet, self).__init__()
 
-        ############### YOUR CODE GOES HERE ############### 
         padding = kernel // 2
 
         self.downconv1 = nn.Sequential(
@@ -247,18 +238,21 @@ class UNet(nn.Module):
             nn.BatchNorm2d(num_filters),
             nn.ReLU())
         self.downconv2 = nn.Sequential(
-            MyConv2d(num_filters, num_filters*2, kernel_size=kernel, padding=padding),
+            MyConv2d(num_filters, num_filters*2, kernel_size=kernel,
+            padding=padding),
             nn.MaxPool2d(2),
             nn.BatchNorm2d(num_filters*2),
             nn.ReLU())
 
         self.rfconv = nn.Sequential(
-            MyConv2d(num_filters*2, num_filters*2, kernel_size=kernel, padding=padding),
+            MyConv2d(num_filters*2, num_filters*2, kernel_size=kernel,
+                padding=padding),
             nn.BatchNorm2d(num_filters*2),
             nn.ReLU())
 
         self.upconv1 = nn.Sequential(
-            MyConv2d(num_filters*2*2, num_filters, kernel_size=kernel, padding=padding),
+            MyConv2d(num_filters*2*2, num_filters, kernel_size=kernel,
+                padding=padding),
             nn.Upsample(scale_factor=2),
             nn.BatchNorm2d(num_filters),
             nn.ReLU())
@@ -269,10 +263,8 @@ class UNet(nn.Module):
             nn.ReLU())
 
         self.finalconv = MyConv2d(25, 24, kernel_size=kernel)
-        ###################################################
 
     def forward(self, x):
-        ############### YOUR CODE GOES HERE ############### 
         self.out1 = self.downconv1(x)
         self.out2 = self.downconv2(self.out1)
         self.out3 = self.rfconv(self.out2)
@@ -280,14 +272,15 @@ class UNet(nn.Module):
         self.out5 = self.upconv2(torch.cat((self.out4, self.out1),1))
         self.out_final = self.finalconv(torch.cat((self.out5,x),1))
         return self.out_final
-        ###################################################
 
 class DilatedUNet(UNet):
     def __init__(self, kernel, num_filters, num_colours):
         super(DilatedUNet, self).__init__(kernel, num_filters, num_colours)
+
         # replace the intermediate dilations
         self.rfconv = nn.Sequential(
-            MyDilatedConv2d(num_filters*2, num_filters*2, kernel_size=kernel, dilation=1),
+            MyDilatedConv2d(num_filters*2, num_filters*2, kernel_size=kernel,
+                dilation=1),
             nn.BatchNorm2d(num_filters*2),
             nn.ReLU())
 
@@ -444,7 +437,8 @@ if __name__ == '__main__':
             raise ValueError("You need to give trained model to evaluate")
 
         print("Loading checkpoint...")
-        cnn.load_state_dict(torch.load(args.checkpoint, map_location=lambda storage, loc: storage))
+        cnn.load_state_dict(torch.load(args.checkpoint,
+            map_location=lambda storage, loc: storage))
         img_path = "outputs/eval_%s.png" % args.model
         val_loss, val_acc = run_validation_step(cnn,
                                                 criterion,

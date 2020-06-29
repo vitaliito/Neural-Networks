@@ -28,18 +28,21 @@ class RegressionCNN(nn.Module):
             nn.BatchNorm2d(num_filters),
             nn.ReLU())
         self.downconv2 = nn.Sequential(
-            nn.Conv2d(num_filters, num_filters*2, kernel_size=kernel, padding=padding),
+            nn.Conv2d(num_filters, num_filters*2, kernel_size=kernel,
+                padding=padding),
             nn.MaxPool2d(2),
             nn.BatchNorm2d(num_filters*2),
             nn.ReLU())
 
         self.rfconv = nn.Sequential(
-            nn.Conv2d(num_filters*2, num_filters*2, kernel_size=kernel, padding=padding),
+            nn.Conv2d(num_filters*2, num_filters*2, kernel_size=kernel,
+                padding=padding),
             nn.BatchNorm2d(num_filters*2),
             nn.ReLU())
 
         self.upconv1 = nn.Sequential(
-            nn.Conv2d(num_filters*2, num_filters, kernel_size=kernel, padding=padding),
+            nn.Conv2d(num_filters*2, num_filters, kernel_size=kernel,
+                padding=padding),
             nn.Upsample(scale_factor=2),
             nn.BatchNorm2d(num_filters),
             nn.ReLU())
@@ -60,9 +63,6 @@ class RegressionCNN(nn.Module):
         out = self.finalconv(out)
         return out
 
-######################################################################
-# Training
-######################################################################
 
 def get_torch_vars(xs, ys, gpu=False):
     """
@@ -158,9 +158,6 @@ def plot(grey, gtcolour, predcolour, path):
       np.hstack(predcolour)])
     scipy.misc.toimage(img, cmin=0, cmax=1).save(path)
 
-######################################################################
-# MAIN
-######################################################################
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Train colourization")
@@ -181,7 +178,8 @@ if __name__ == '__main__':
     #train(cnn); exit(0)
 
     print("Loading weights...")
-    checkpoint = torch.load('weights/regression_cnn_k%d_f%d.pkl' % (args.kernel, args.num_filters), map_location=lambda storage, loc: storage)
+    checkpoint = torch.load('weights/regression_cnn_k%d_f%d.pkl' % (args.kernel,
+        args.num_filters), map_location=lambda storage, loc: storage)
     cnn.load_state_dict(checkpoint)
 
     print("Loading data...")
